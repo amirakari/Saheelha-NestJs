@@ -9,8 +9,11 @@ import {
 import { UserEntity } from '../../utilisateur/entities/user.entity';
 import { ProduitEntity } from '../../produit/entities/produit.entity';
 import { AbonnementEntity } from '../../abonnement/entities/abonnement.entity';
+import { TimestampEntities } from '../../Generics/Timestamp.entities';
+import { UserTypeEnum } from '../../enums/user.type.enum';
+import { BoutiqueDomaineEnum } from '../../enums/boutique.domaine.enum';
 @Entity('boutique')
-export class BoutiqueEntity {
+export class BoutiqueEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
@@ -28,7 +31,7 @@ export class BoutiqueEntity {
     unique: true,
   })
   mailprofessionnelle: string;
-  @Column()
+  @Column({ type: 'enum', enum: BoutiqueDomaineEnum })
   domaine: string;
   @ManyToOne((type) => UserEntity, (user) => user.boutiques, {
     cascade: ['insert', 'update'],

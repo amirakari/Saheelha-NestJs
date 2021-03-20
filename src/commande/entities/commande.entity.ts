@@ -8,11 +8,11 @@ import {
 } from 'typeorm';
 import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 import { CommentaireEntity } from '../../commentaire/entities/commentaire.entity';
-import { EvaluationproduitEntity } from '../../evaluationproduit/entities/evaluationproduit.entity';
 import { UserEntity } from '../../utilisateur/entities/user.entity';
 import { ProduitEntity } from '../../produit/entities/produit.entity';
+import { TimestampEntities } from '../../Generics/Timestamp.entities';
 @Entity('commande')
-export class CommandeEntity {
+export class CommandeEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()

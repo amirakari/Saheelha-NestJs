@@ -8,8 +8,9 @@ import {
 import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 import { ProduitEntity } from '../../produit/entities/produit.entity';
 import { UserEntity } from '../../utilisateur/entities/user.entity';
+import { TimestampEntities } from '../../Generics/Timestamp.entities';
 @Entity('commentaire')
-export class CommentaireEntity {
+export class CommentaireEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()

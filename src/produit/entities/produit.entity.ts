@@ -12,18 +12,21 @@ import { CommentaireEntity } from '../../commentaire/entities/commentaire.entity
 import { EvaluationproduitEntity } from '../../evaluationproduit/entities/evaluationproduit.entity';
 import { CommandeEntity } from '../../commande/entities/commande.entity';
 import { ListefavorisEntity } from '../../listefavoris/entities/listefavoris.entity';
+import { TimestampEntities } from '../../Generics/Timestamp.entities';
+import { BoutiqueDomaineEnum } from '../../enums/boutique.domaine.enum';
+import { ProduitCategorieEnum } from '../../enums/produit.categorie.enum';
 @Entity('produit')
-export class ProduitEntity {
+export class ProduitEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({ type: 'enum', enum: ProduitCategorieEnum })
   categorie: string;
   @Column()
   DLC: Date;
   @Column()
   nom: string;
   @Column()
-  codeabare: string;
+  codeabare: number;
   @Column()
   prixsansremise: number;
   @Column()

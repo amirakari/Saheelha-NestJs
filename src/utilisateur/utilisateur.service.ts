@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
@@ -11,9 +12,13 @@ import { AddUserDto } from './DTO/Add-user.dto';
 import { UpdateUserDto } from './DTO/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { PayloadInterface } from './interfaces/payload.interface';
+import { ConfigService } from '@nestjs/config';
+import { ExtractJwt } from 'passport-jwt';
 @Injectable()
 export class UtilisateurService {
   constructor(
+    private configService: ConfigService,
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private jwtservice: JwtService,
