@@ -9,30 +9,30 @@ import {
 import { Type } from 'class-transformer';
 
 export class UpdateBoutiqueDto {
-  @IsNotEmpty()
+  @IsOptional()
   id: number;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   nom: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   adresse: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   horaire: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   photo: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   domaine: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   type: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsEmail()
   mailprofessionnelle: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   visite: string;
 }

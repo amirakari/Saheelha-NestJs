@@ -15,6 +15,8 @@ import { JwtService } from '@nestjs/jwt';
 import { PayloadInterface } from './interfaces/payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt } from 'passport-jwt';
+import { from, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 @Injectable()
 export class UtilisateurService {
   constructor(

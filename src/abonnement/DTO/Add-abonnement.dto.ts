@@ -5,12 +5,12 @@ import { Type } from 'class-transformer';
 export class AddAbonnementDto {
   @IsNotEmpty()
   @IsString()
-  durée: string;
+  private _durée: string;
   @IsNotEmpty()
   @IsString()
-  status: string;
+  private _status: string;
   @IsNotEmpty()
   @Type(() => Number)
   @IsNumber()
-  prix: number;
+  private _prix: number;
 }

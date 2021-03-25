@@ -27,6 +27,8 @@ export class UserEntity extends TimestampEntities {
   numtel: number;
   @Column()
   adresse: string;
+  @Column({ nullable: true })
+  photodeprofil: string;
   @Column({ type: 'enum', enum: UserTypeEnum, default: UserTypeEnum.USER })
   type: string;
   @Column()

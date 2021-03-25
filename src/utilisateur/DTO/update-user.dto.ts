@@ -10,6 +10,9 @@ export class UpdateUserDto {
   @IsString()
   prenom: string;
   @IsOptional()
+  @IsString()
+  photodeprofil: string;
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   numtel: number;

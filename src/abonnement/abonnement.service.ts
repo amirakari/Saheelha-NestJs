@@ -2,11 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AbonnementEntity } from './entities/abonnement.entity';
 import { UpdateAbonnementDto } from './DTO/update-abonnement.dto';
 import { AddAbonnementDto } from './DTO/Add-abonnement.dto';
-import { Repository } from 'typeorm';
+import { InsertResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AbonnementService {
+  addAbonnementDto: AddAbonnementDto;
   constructor(
     @InjectRepository(AbonnementEntity)
     private userRepository: Repository<AbonnementEntity>,
@@ -14,8 +15,41 @@ export class AbonnementService {
   async getUsers(): Promise<AbonnementEntity[]> {
     return await this.userRepository.find();
   }
-  async addCv(user: AddAbonnementDto): Promise<AbonnementEntity> {
-    return await this.userRepository.save(user);
+  async addCv1(): Promise<InsertResult> {
+    const qb = this.userRepository.createQueryBuilder('abonnement');
+    return await qb
+      .insert()
+      .into(AbonnementEntity)
+      .values({
+        durée: '1 moi',
+        status: 'non payé',
+        prix: 10,
+      })
+      .execute();
+  }
+  async addCv2(): Promise<InsertResult> {
+    const qb = this.userRepository.createQueryBuilder('abonnement');
+    return await qb
+      .insert()
+      .into(AbonnementEntity)
+      .values({
+        durée: '3 mois',
+        status: 'non payé',
+        prix: 20,
+      })
+      .execute();
+  }
+  async addCv3(): Promise<InsertResult> {
+    const qb = this.userRepository.createQueryBuilder('abonnement');
+    return await qb
+      .insert()
+      .into(AbonnementEntity)
+      .values({
+        durée: '12 mois',
+        status: 'non payé',
+        prix: 100,
+      })
+      .execute();
   }
   async findById(id: number) {
     const utilisateur = await this.userRepository.findOne(id);

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Req,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -23,22 +24,13 @@ import { Observable, of } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
+import path, { join } from 'path';
+import { UpdateUserDto } from '../utilisateur/DTO/update-user.dto';
 @Controller('boutique')
 export class BoutiqueController {
   constructor(private boutiqueService: BoutiqueService) {}
-  @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads/images',
-      }),
-    }),
-  )
-  uploadfile(@UploadedFile() file: Express.Multer.File): Observable<any> {
-    return of({ imagePath: file.path });
-  }
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAllcvs(): Promise<BoutiqueEntity[]> {
     return await this.boutiqueService.getBoutique();
   }
@@ -59,6 +51,38 @@ export class BoutiqueController {
     @User() user,
   ): Promise<BoutiqueEntity> {
     return await this.boutiqueService.updateBoutique(id, updateUserDto, user);
+  }
+  @Post('upload/:id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/imagesboutique',
+      }),
+    }),
+  )
+  uploadfile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() request: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateBoutiqueDto,
+    @User() user,
+  ): Promise<any> {
+    updateUserDto.photo = file.filename;
+    console.log(updateUserDto);
+    return this.boutiqueService.updateBoutique(id, updateUserDto, user);
+  }
+  @Get('profileimage/:image')
+  @UseGuards(JwtAuthGuard)
+  findProfileImage(
+    @Res() res,
+    @Param('image') image,
+    @Req() request: Request,
+  ): Observable<any> {
+    const user = request.user;
+    return of(
+      res.sendFile(join(process.cwd(), 'uploads/imagesboutique/' + image)),
+    );
   }
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
