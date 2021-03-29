@@ -14,6 +14,13 @@ export class ProduitService {
   async getUsers(): Promise<ProduitEntity[]> {
     return await this.userRepository.find();
   }
+  async getProduitParBoutique(id: number): Promise<ProduitEntity[]> {
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .where('produit.boutique.id = :id', { id })
+      .getMany();
+    return qb;
+  }
   async addCv(user: AddProduitDto): Promise<ProduitEntity> {
     return await this.userRepository.save(user);
   }

@@ -79,7 +79,6 @@ export class UtilisateurController {
   )
   uploadfile(
     @UploadedFile() file: Express.Multer.File,
-    @Req() request: Request,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
