@@ -15,8 +15,13 @@ export class CommentaireService {
   async getUsers(): Promise<CommentaireEntity[]> {
     return await this.userRepository.find();
   }
-  async addCv(user: AddCommentaireDto): Promise<CommentaireEntity> {
-    return await this.userRepository.save(user);
+  async addCv(
+    commentaire: AddCommentaireDto,
+    user,
+  ): Promise<CommentaireEntity> {
+    const newBoutique = this.userRepository.create(commentaire);
+    newBoutique.user = user;
+    return await this.userRepository.save(newBoutique);
   }
   async findById(id: number) {
     const utilisateur = await this.userRepository.findOne(id);

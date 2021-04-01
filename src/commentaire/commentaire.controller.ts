@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentaireService } from './commentaire.service';
 import { CommentaireEntity } from './entities/commentaire.entity';
@@ -14,6 +16,8 @@ import { AddAbonnementDto } from '../abonnement/DTO/Add-abonnement.dto';
 import { UpdateAbonnementDto } from '../abonnement/DTO/update-abonnement.dto';
 import { AddCommentaireDto } from './DTO/Add-commentaire.dto';
 import { UpdateCommentaireDto } from './DTO/update-commentaire.dto';
+import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('commentaire')
 export class CommentaireController {
@@ -23,8 +27,13 @@ export class CommentaireController {
     return await this.userService.getUsers();
   }
   @Post()
-  async addCv(@Body() addCvDto: AddCommentaireDto): Promise<CommentaireEntity> {
-    return this.userService.addCv(addCvDto);
+  @UseGuards(JwtAuthGuard)
+  async addCv(
+    @Body() addCvDto: AddCommentaireDto,
+    @Req() request: Request,
+  ): Promise<CommentaireEntity> {
+    const user = request.user;
+    return this.userService.addCv(addCvDto, user);
   }
   @Patch(':id')
   async updateCv(

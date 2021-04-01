@@ -15,6 +15,7 @@ import { ListefavorisEntity } from '../../listefavoris/entities/listefavoris.ent
 import { TimestampEntities } from '../../Generics/Timestamp.entities';
 import { BoutiqueDomaineEnum } from '../../enums/boutique.domaine.enum';
 import { ProduitCategorieEnum } from '../../enums/produit.categorie.enum';
+import { Transform } from 'class-transformer';
 @Entity('produit')
 export class ProduitEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()

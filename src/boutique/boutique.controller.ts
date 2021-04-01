@@ -30,7 +30,6 @@ import { UpdateUserDto } from '../utilisateur/DTO/update-user.dto';
 export class BoutiqueController {
   constructor(private boutiqueService: BoutiqueService) {}
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getAllcvs(): Promise<BoutiqueEntity[]> {
     return await this.boutiqueService.getBoutique();
   }

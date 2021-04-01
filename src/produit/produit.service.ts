@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from './entities/produit.entity';
 import { Repository } from 'typeorm';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
+import { UserTypeEnum } from '../enums/user.type.enum';
 
 @Injectable()
 export class ProduitService {

@@ -19,13 +19,18 @@ import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 export class ProduitController {
   constructor(private userService: ProduitService) {}
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getAllcvs(): Promise<ProduitEntity[]> {
     return await this.userService.getUsers();
   }
-  @Get('boutique')
+  @Get('/:id')
+  async getProduitbyId(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findById(id);
+  }
+  @Get('boutique/:id')
   @UseGuards(JwtAuthGuard)
-  async getproduitbyId(id: number): Promise<ProduitEntity[]> {
+  async getproduitbyId(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutique(id);
   }
   @Post()

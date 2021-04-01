@@ -1,6 +1,7 @@
 import { Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsDate,
+  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -27,7 +28,7 @@ export class AddProduitDto {
   @IsNumber()
   prixsansremise: number;
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   DLC: Date;
   @IsNotEmpty()
   @Type(() => Number)
