@@ -7,6 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { UserEntity } from '../../utilisateur/entities/user.entity';
 
 export class AddCommentaireDto {
   @IsNotEmpty()

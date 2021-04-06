@@ -33,6 +33,11 @@ export class BoutiqueController {
   async getAllcvs(): Promise<BoutiqueEntity[]> {
     return await this.boutiqueService.getBoutique();
   }
+  @Get('user/:id')
+  @UseGuards(JwtAuthGuard)
+  async getboutiquebyuser(@Param('id', ParseIntPipe) id: number) {
+    return await this.boutiqueService.getBoutiqueParUser(id);
+  }
   @Post()
   @UseGuards(JwtAuthGuard)
   async addCv(

@@ -18,6 +18,7 @@ import { AddCommentaireDto } from './DTO/Add-commentaire.dto';
 import { UpdateCommentaireDto } from './DTO/update-commentaire.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { Request } from 'express';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 
 @Controller('commentaire')
 export class CommentaireController {
@@ -34,6 +35,11 @@ export class CommentaireController {
   ): Promise<CommentaireEntity> {
     const user = request.user;
     return this.userService.addCv(addCvDto, user);
+  }
+  @Get('produit/:id')
+  @UseGuards(JwtAuthGuard)
+  async getproduitbyId(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommentaireParProduit(id);
   }
   @Patch(':id')
   async updateCv(

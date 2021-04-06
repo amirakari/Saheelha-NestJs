@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from './entities/produit.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { UserTypeEnum } from '../enums/user.type.enum';
+import { User } from '../decorators/user.decorator';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ProduitService {
@@ -21,6 +27,16 @@ export class ProduitService {
       .where('produit.boutique.id = :id', { id })
       .getMany();
     return qb;
+  }
+  async rechercheParNom(nom: string, categorie: string) {
+    return this.userRepository.find({
+      where: [
+        {
+          nom: Like(`%${nom}%`),
+          categorie: Like(`%${categorie}%`),
+        },
+      ],
+    });
   }
   async addCv(user: AddProduitDto): Promise<ProduitEntity> {
     return await this.userRepository.save(user);

@@ -10,6 +10,7 @@ import { AddBoutiqueDto } from './DTO/Add-boutique.dto';
 import { UpdateBoutiqueDto } from './DTO/update-boutique.dto';
 import { UserEntity } from '../utilisateur/entities/user.entity';
 import { UserTypeEnum } from '../enums/user.type.enum';
+import { CommentaireEntity } from '../commentaire/entities/commentaire.entity';
 
 @Injectable()
 export class BoutiqueService {
@@ -55,6 +56,12 @@ export class BoutiqueService {
     )
       return await this.boutiqueRepository.save(newUser);
     else throw new UnauthorizedException();
+  }
+  async getBoutiqueParUser(id: number): Promise<BoutiqueEntity[]> {
+    const qb = this.boutiqueRepository
+      .createQueryBuilder('boutique')
+      .where('boutique.user.id = :id', { id });
+    return qb.getMany();
   }
   async softDeleteBoutique(id: number, user) {
     const newUser = await this.boutiqueRepository.findOne(id);

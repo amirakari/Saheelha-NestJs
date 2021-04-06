@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ProduitService } from './produit.service';
@@ -14,6 +15,7 @@ import { ProduitEntity } from './entities/produit.entity';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
+import { Observable } from 'rxjs';
 
 @Controller('produit')
 export class ProduitController {
@@ -21,6 +23,17 @@ export class ProduitController {
   @Get()
   async getAllcvs(): Promise<ProduitEntity[]> {
     return await this.userService.getUsers();
+  }
+  @Get('recherche')
+  async rechercheParNom(
+    @Query('nom') nom: string,
+    @Query('categorie') categorie: string,
+  ) {
+    if (categorie == null || categorie == undefined) {
+      return await this.userService.getUsers();
+    } else {
+      return this.userService.rechercheParNom(nom, categorie);
+    }
   }
   @Get('/:id')
   async getProduitbyId(@Param('id', ParseIntPipe) id: number) {

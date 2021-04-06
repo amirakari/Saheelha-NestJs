@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AddCommentaireDto } from './DTO/Add-commentaire.dto';
 import { UpdateAbonnementDto } from '../abonnement/DTO/update-abonnement.dto';
 import { UpdateCommentaireDto } from './DTO/update-commentaire.dto';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 
 @Injectable()
 export class CommentaireService {
@@ -29,6 +30,12 @@ export class CommentaireService {
       throw new NotFoundException(`l'utilisateur d'id ${id} n'existe pas`);
     }
     return utilisateur;
+  }
+  async getCommentaireParProduit(id: number): Promise<CommentaireEntity[]> {
+    const qb = this.userRepository
+      .createQueryBuilder('commentaire')
+      .where('commentaire.produit.id = :id', { id });
+    return qb.getMany();
   }
   async updateCv(
     id: number,
