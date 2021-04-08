@@ -22,6 +22,20 @@ export class UpdateBoutiqueDto {
   horaire: string;
   @IsOptional()
   @IsString()
+  facebook: string;
+  @IsOptional()
+  @IsString()
+  instagram: string;
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  mapLat: number;
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  mapLng: number;
+  @IsOptional()
+  @IsString()
   photo: string;
   @IsOptional()
   @IsString()

@@ -20,6 +20,9 @@ export class AddProduitDto {
   @IsString()
   reference: string;
   @IsNotEmpty()
+  @IsString()
+  status: string;
+  @IsNotEmpty()
   @Type(() => Number)
   @IsNumber()
   codeabare: number;

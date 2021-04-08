@@ -11,11 +11,13 @@ import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 import { CommentaireEntity } from '../../commentaire/entities/commentaire.entity';
 import { EvaluationproduitEntity } from '../../evaluationproduit/entities/evaluationproduit.entity';
 import { CommandeEntity } from '../../commande/entities/commande.entity';
-import { ListefavorisEntity } from '../../listefavoris/entities/listefavoris.entity';
+import { PanierEntity } from '../../listefavoris/entities/panier.entity';
 import { TimestampEntities } from '../../Generics/Timestamp.entities';
 import { BoutiqueDomaineEnum } from '../../enums/boutique.domaine.enum';
 import { ProduitCategorieEnum } from '../../enums/produit.categorie.enum';
 import { Transform } from 'class-transformer';
+import { AbonnementStatusEnum } from '../../enums/abonnement.status.enum';
+import { ProduitStatusEnum } from '../../enums/produit.status.enum';
 @Entity('produit')
 export class ProduitEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
@@ -30,6 +32,8 @@ export class ProduitEntity extends TimestampEntities {
   codeabare: number;
   @Column()
   prixsansremise: number;
+  @Column({ type: 'enum', enum: ProduitStatusEnum })
+  status: string;
   @Column()
   prixavecremise: number;
   @PrimaryColumn()
@@ -66,14 +70,10 @@ export class ProduitEntity extends TimestampEntities {
     nullable: true,
   })
   commandes: CommandeEntity[];
-  @ManyToOne(
-    (type) => ListefavorisEntity,
-    (listefavoris) => listefavoris.produits,
-    {
-      cascade: ['insert', 'update'],
-      nullable: true,
-      eager: true,
-    },
-  )
-  listefavoris: ListefavorisEntity;
+  @ManyToOne((type) => PanierEntity, (panier) => panier.produits, {
+    cascade: ['insert', 'update'],
+    nullable: true,
+    eager: true,
+  })
+  panier: PanierEntity;
 }

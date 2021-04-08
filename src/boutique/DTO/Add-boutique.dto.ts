@@ -14,6 +14,20 @@ export class AddBoutiqueDto {
   horaire: string;
   @IsNotEmpty()
   @IsString()
+  facebook: string;
+  @IsNotEmpty()
+  @IsString()
+  instagram: string;
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  mapLat: number;
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  mapLng: number;
+  @IsNotEmpty()
+  @IsString()
   private _photo: string;
   @IsNotEmpty()
   @IsString()

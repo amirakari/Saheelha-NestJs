@@ -12,7 +12,7 @@ import { type } from 'os';
 import { CommentaireEntity } from '../../commentaire/entities/commentaire.entity';
 import { EvaluationproduitEntity } from '../../evaluationproduit/entities/evaluationproduit.entity';
 import { CommandeEntity } from '../../commande/entities/commande.entity';
-import { ListefavorisEntity } from '../../listefavoris/entities/listefavoris.entity';
+import { PanierEntity } from '../../listefavoris/entities/panier.entity';
 import { UserTypeEnum } from '../../enums/user.type.enum';
 
 @Entity('utilisateur')
@@ -47,6 +47,11 @@ export class UserEntity extends TimestampEntities {
     nullable: true,
   })
   boutiques: BoutiqueEntity[];
+  @OneToMany((type) => PanierEntity, (panier) => panier.user, {
+    cascade: true,
+    nullable: true,
+  })
+  panier: PanierEntity[];
   @OneToMany((type) => CommentaireEntity, (commentaire) => commentaire.user, {
     cascade: true,
     nullable: true,
@@ -66,9 +71,4 @@ export class UserEntity extends TimestampEntities {
     nullable: true,
   })
   commandes: CommandeEntity[];
-  @OneToOne((type) => ListefavorisEntity, (listefavoris) => listefavoris.user, {
-    cascade: true,
-    nullable: true,
-  })
-  listefavoris: ListefavorisEntity[];
 }

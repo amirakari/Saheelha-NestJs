@@ -77,7 +77,6 @@ export class BoutiqueController {
     return this.boutiqueService.updateBoutique(id, updateUserDto, user);
   }
   @Get('profileimage/:image')
-  @UseGuards(JwtAuthGuard)
   findProfileImage(
     @Res() res,
     @Param('image') image,
@@ -102,11 +101,7 @@ export class BoutiqueController {
     this.boutiqueService.restoreUtilisateur(id, user);
   }
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  async getBoutique(
-    @Param('id', ParseIntPipe) id,
-    @User() user,
-  ): Promise<BoutiqueEntity> {
-    return this.boutiqueService.findById(id, user);
+  async getBoutique(@Param('id', ParseIntPipe) id): Promise<BoutiqueEntity> {
+    return this.boutiqueService.findById(id);
   }
 }

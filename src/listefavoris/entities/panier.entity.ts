@@ -1,20 +1,30 @@
-import { Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ProduitEntity } from '../../produit/entities/produit.entity';
 import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 import { UserEntity } from '../../utilisateur/entities/user.entity';
 import { TimestampEntities } from '../../Generics/Timestamp.entities';
-@Entity('listefavoris')
-export class ListefavorisEntity extends TimestampEntities {
+@Entity('panier')
+export class PanierEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
-  @OneToMany((type) => ProduitEntity, (produit) => produit.listefavoris, {
+  @Column()
+  quantite: number;
+  @OneToMany((type) => ProduitEntity, (produit) => produit.panier, {
     cascade: true,
     nullable: true,
   })
   produits: ProduitEntity[];
-  @OneToOne((type) => UserEntity, (user) => user.listefavoris, {
+  @ManyToOne((type) => UserEntity, (user) => user.panier, {
     cascade: ['insert', 'update'],
     nullable: true,
+    eager: true,
   })
   user: UserEntity[];
 }

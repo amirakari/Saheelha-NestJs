@@ -19,6 +19,9 @@ export class UpdateProduitDto {
   @IsString()
   reference: string;
   @IsOptional()
+  @IsString()
+  status: string;
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   codeabare: number;

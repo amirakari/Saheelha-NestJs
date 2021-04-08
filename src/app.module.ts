@@ -18,7 +18,7 @@ import { CommandeEntity } from './commande/entities/commande.entity';
 import { CommentaireEntity } from './commentaire/entities/commentaire.entity';
 import { ProduitEntity } from './produit/entities/produit.entity';
 import { EvaluationproduitEntity } from './evaluationproduit/entities/evaluationproduit.entity';
-import { ListefavorisEntity } from './listefavoris/entities/listefavoris.entity';
+import { PanierEntity } from './listefavoris/entities/panier.entity';
 import { EvaluationproduitModule } from './evaluationproduit/evaluationproduit.module';
 import { JwtStrategy } from './utilisateur/strategy/passport-jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
@@ -47,7 +47,7 @@ dotenv.config();
         CommentaireEntity,
         ProduitEntity,
         EvaluationproduitEntity,
-        ListefavorisEntity,
+        PanierEntity,
       ],
       synchronize: false,
     }),

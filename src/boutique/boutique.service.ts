@@ -26,17 +26,9 @@ export class BoutiqueService {
     newBoutique.user = user;
     return await this.boutiqueRepository.save(newBoutique);
   }
-  async findById(id: number, user) {
+  async findById(id: number) {
     const utilisateur = await this.boutiqueRepository.findOne(id);
-    if (!utilisateur) {
-      throw new NotFoundException(`l'utilisateur d'id ${id} n'existe pas`);
-    }
-    if (
-      user.type === UserTypeEnum.ADMIN ||
-      (utilisateur.user && utilisateur.user.id === user.id)
-    )
-      return utilisateur;
-    else throw new UnauthorizedException();
+    return utilisateur;
   }
   async updateBoutique(
     id: number,

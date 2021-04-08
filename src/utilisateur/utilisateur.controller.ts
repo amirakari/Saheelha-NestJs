@@ -87,7 +87,6 @@ export class UtilisateurController {
     return this.userService.updateCv(id, updateUserDto);
   }
   @Get('profileimage/:image')
-  @UseGuards(JwtAuthGuard)
   findProfileImage(
     @Res() res,
     @Param('image') image,

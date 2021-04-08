@@ -25,6 +25,14 @@ export class BoutiqueEntity extends TimestampEntities {
   @Column()
   horaire: string;
   @Column()
+  facebook: string;
+  @Column()
+  instagram: string;
+  @Column()
+  mapLat: number;
+  @Column()
+  mapLng: number;
+  @Column()
   visite: string;
   @PrimaryColumn()
   @Column({

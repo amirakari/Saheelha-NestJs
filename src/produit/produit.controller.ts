@@ -25,14 +25,19 @@ export class ProduitController {
     return await this.userService.getUsers();
   }
   @Get('recherche')
-  async rechercheParNom(
-    @Query('nom') nom: string,
-    @Query('categorie') categorie: string,
-  ) {
-    if (categorie == null || categorie == undefined) {
+  async rechercheParNom(@Query('nom') nom: string) {
+    if (nom == null || nom == undefined) {
       return await this.userService.getUsers();
     } else {
-      return this.userService.rechercheParNom(nom, categorie);
+      return this.userService.rechercheParNom(nom);
+    }
+  }
+  @Get('recherche1')
+  async recherchePartype(@Query('type') type: string) {
+    if (type == null || type == undefined) {
+      return await this.userService.getUsers();
+    } else {
+      return this.userService.recherchePartype(type);
     }
   }
   @Get('/:id')

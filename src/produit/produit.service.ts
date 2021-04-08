@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from './entities/produit.entity';
-import { Like, Repository } from 'typeorm';
+import { Like, Raw, Repository } from 'typeorm';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { UserTypeEnum } from '../enums/user.type.enum';
@@ -19,7 +19,13 @@ export class ProduitService {
     private userRepository: Repository<ProduitEntity>,
   ) {}
   async getUsers(): Promise<ProduitEntity[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      where: [
+        {
+          DLC: Raw((alias) => `${alias} > NOW()`),
+        },
+      ],
+    });
   }
   async getProduitParBoutique(id: number): Promise<ProduitEntity[]> {
     const qb = this.userRepository
@@ -28,12 +34,22 @@ export class ProduitService {
       .getMany();
     return qb;
   }
-  async rechercheParNom(nom: string, categorie: string) {
+  async rechercheParNom(nom: string) {
     return this.userRepository.find({
       where: [
         {
           nom: Like(`%${nom}%`),
-          categorie: Like(`%${categorie}%`),
+          DLC: Raw((alias) => `${alias} > NOW()`),
+        },
+      ],
+    });
+  }
+  async recherchePartype(type: string) {
+    return this.userRepository.find({
+      where: [
+        {
+          categorie: Like(`%${type}%`),
+          DLC: Raw((alias) => `${alias} > NOW()`),
         },
       ],
     });
