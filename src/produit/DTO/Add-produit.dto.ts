@@ -8,6 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 
 export class AddProduitDto {
   @IsNotEmpty()

@@ -19,18 +19,29 @@ export class ProduitService {
     private userRepository: Repository<ProduitEntity>,
   ) {}
   async getUsers(): Promise<ProduitEntity[]> {
-    return await this.userRepository.find({
-      where: [
-        {
-          DLC: Raw((alias) => `${alias} > NOW()`),
-        },
-      ],
-    });
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .where('produit.DLC > Now()')
+      .getMany();
+    return qb;
   }
   async getProduitParBoutique(id: number): Promise<ProduitEntity[]> {
+    const status = 'à vendre';
     const qb = this.userRepository
       .createQueryBuilder('produit')
       .where('produit.boutique.id = :id', { id })
+      .andWhere('produit.status = :status', { status })
+      .andWhere('produit.DLC > Now()')
+      .getMany();
+    return qb;
+  }
+  async getProduitParBoutiqueDon(id: number): Promise<ProduitEntity[]> {
+    const status = 'à donner';
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .where('produit.boutique.id = :id', { id })
+      .andWhere('produit.status = :status', { status })
+      .andWhere('produit.DLC > Now()')
       .getMany();
     return qb;
   }
@@ -49,6 +60,16 @@ export class ProduitService {
       where: [
         {
           categorie: Like(`%${type}%`),
+          DLC: Raw((alias) => `${alias} > NOW()`),
+        },
+      ],
+    });
+  }
+  async rechercheParStatus(status: string) {
+    return this.userRepository.find({
+      where: [
+        {
+          status: Like(`%${status}%`),
           DLC: Raw((alias) => `${alias} > NOW()`),
         },
       ],

@@ -15,7 +15,6 @@ import { ProduitEntity } from './entities/produit.entity';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
-import { Observable } from 'rxjs';
 
 @Controller('produit')
 export class ProduitController {
@@ -40,6 +39,14 @@ export class ProduitController {
       return this.userService.recherchePartype(type);
     }
   }
+  @Get('recherche2')
+  async rechercheParStatus(@Query('status') status: string) {
+    if (status == null || status == undefined) {
+      return await this.userService.getUsers();
+    } else {
+      return this.userService.rechercheParStatus(status);
+    }
+  }
   @Get('/:id')
   async getProduitbyId(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.findById(id);
@@ -50,6 +57,13 @@ export class ProduitController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutique(id);
+  }
+  @Get('boutique1/:id')
+  @UseGuards(JwtAuthGuard)
+  async getproduitbyId1(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ProduitEntity[]> {
+    return await this.userService.getProduitParBoutiqueDon(id);
   }
   @Post()
   @UseGuards(JwtAuthGuard)

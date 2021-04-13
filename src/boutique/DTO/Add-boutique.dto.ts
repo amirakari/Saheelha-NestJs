@@ -1,5 +1,11 @@
 import { Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsDecimal,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AddBoutiqueDto {
@@ -19,27 +25,17 @@ export class AddBoutiqueDto {
   @IsString()
   instagram: string;
   @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber()
+  @Type(() => IsDecimal)
+  @IsDecimal()
   mapLat: number;
   @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber()
+  @Type(() => IsDecimal)
+  @IsDecimal()
   mapLng: number;
-  @IsNotEmpty()
-  @IsString()
-  private _photo: string;
   @IsNotEmpty()
   @IsString()
   domaine: string;
   @IsNotEmpty()
   @IsEmail()
   mailprofessionnelle: string;
-  @IsNotEmpty()
-  @IsString()
-  visite: string;
-
-  set photo(value: string) {
-    this._photo = value;
-  }
 }

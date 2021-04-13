@@ -12,6 +12,8 @@ import { AbonnementEntity } from '../../abonnement/entities/abonnement.entity';
 import { TimestampEntities } from '../../Generics/Timestamp.entities';
 import { UserTypeEnum } from '../../enums/user.type.enum';
 import { BoutiqueDomaineEnum } from '../../enums/boutique.domaine.enum';
+import { IsDecimal, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 @Entity('boutique')
 export class BoutiqueEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
@@ -29,8 +31,12 @@ export class BoutiqueEntity extends TimestampEntities {
   @Column()
   instagram: string;
   @Column()
+  @Type(() => IsDecimal)
+  @IsNumber()
   mapLat: number;
   @Column()
+  @Type(() => IsDecimal)
+  @IsNumber()
   mapLng: number;
   @Column()
   visite: string;
