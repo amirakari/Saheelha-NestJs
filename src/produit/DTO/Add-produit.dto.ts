@@ -32,6 +32,10 @@ export class AddProduitDto {
   @IsNumber()
   prixsansremise: number;
   @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  quantite: number;
+  @IsNotEmpty()
   @IsDateString()
   DLC: Date;
   @IsNotEmpty()

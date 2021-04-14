@@ -31,6 +31,14 @@ export class ProduitController {
       return this.userService.rechercheParNom(nom);
     }
   }
+  @Get('recherche3')
+  async rechercheParLocalisation(@Query('adresse') adresse: string) {
+    if (adresse === null || adresse === undefined) {
+      return await this.userService.getUsers();
+    } else {
+      return this.userService.rechercheParLocalisation(adresse);
+    }
+  }
   @Get('recherche1')
   async recherchePartype(@Query('type') type: string) {
     if (type == null || type == undefined) {

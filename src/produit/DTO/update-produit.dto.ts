@@ -30,6 +30,10 @@ export class UpdateProduitDto {
   @IsNumber()
   prixsansremise: number;
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  quantite: number;
+  @IsOptional()
   @IsDate()
   DLC: Date;
   @IsOptional()

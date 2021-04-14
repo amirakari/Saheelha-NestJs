@@ -45,6 +45,15 @@ export class ProduitService {
       .getMany();
     return qb;
   }
+  async rechercheParLocalisation(adresse: string): Promise<ProduitEntity[]> {
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .leftJoin('produit.boutique', 'boutique')
+      .where('boutique.adresse = :adresse', { adresse })
+      .andWhere('produit.DLC > Now()')
+      .getMany();
+    return qb;
+  }
   async rechercheParNom(nom: string) {
     return this.userRepository.find({
       where: [
