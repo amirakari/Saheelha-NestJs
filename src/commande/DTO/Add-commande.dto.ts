@@ -8,12 +8,4 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class AddCommandeDto {
-  @IsNotEmpty()
-  @IsDate()
-  date: Date;
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber()
-  quantite: number;
-}
+export class AddCommandeDto {}

@@ -86,6 +86,25 @@ export class ProduitController {
   ): Promise<ProduitEntity> {
     return await this.userService.updateCv(id, updateUserDto);
   }
+  @Patch('panier/:id/:quantite')
+  @UseGuards(JwtAuthGuard)
+  async ajouterProduitaupanier(
+    @Body() updateUserDto: UpdateProduitDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('quantite', ParseIntPipe) quantite: number,
+  ): Promise<ProduitEntity> {
+    return await this.userService.ajouterProduitaupanier(
+      id,
+      updateUserDto,
+      quantite,
+    );
+  }
+  @Get('amir/:id')
+  async rechercheParPanier(@Param('id', ParseIntPipe) id: number) {
+    console.log('amir');
+    return this.userService.findByPanierId(id);
+    console.log('akari');
+  }
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async removeUser(@Param('id', ParseIntPipe) id: number) {

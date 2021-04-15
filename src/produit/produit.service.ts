@@ -11,10 +11,13 @@ import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { UserTypeEnum } from '../enums/user.type.enum';
 import { User } from '../decorators/user.decorator';
 import { Observable } from 'rxjs';
+import { PanierEntity } from '../listefavoris/entities/panier.entity';
 
 @Injectable()
 export class ProduitService {
   constructor(
+    @InjectRepository(PanierEntity)
+    private PanierRepository: Repository<PanierEntity>,
     @InjectRepository(ProduitEntity)
     private userRepository: Repository<ProduitEntity>,
   ) {}
@@ -103,6 +106,29 @@ export class ProduitService {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }
     return await this.userRepository.save(newUser);
+  }
+  async ajouterProduitaupanier(
+    id: number,
+    user: UpdateProduitDto,
+    quantite: number,
+  ): Promise<ProduitEntity> {
+    const newUser = await this.userRepository.preload({
+      id,
+      ...user,
+    });
+    if (!newUser) {
+      throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
+    }
+    newUser.quantite = newUser.quantite - quantite;
+    return await this.userRepository.save(newUser);
+  }
+  async findByPanierId(id: number) {
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .leftJoin('produit.panier', 'panier')
+      .where('produit.panier.id = :id', { id })
+      .getMany();
+    return qb;
   }
   async softDeleteUser(id: number) {
     return this.userRepository.softDelete(id);

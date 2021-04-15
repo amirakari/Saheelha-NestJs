@@ -14,8 +14,6 @@ import { TimestampEntities } from '../../Generics/Timestamp.entities';
 export class PanierEntity extends TimestampEntities {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
-  quantite: number;
   @OneToMany((type) => ProduitEntity, (produit) => produit.panier, {
     cascade: true,
     nullable: true,

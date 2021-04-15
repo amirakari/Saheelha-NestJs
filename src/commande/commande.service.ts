@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommandeEntity } from './entities/commande.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Raw, Repository } from 'typeorm';
 import { AddCommandeDto } from './DTO/Add-commande.dto';
 import { UpdateCommandeDto } from './DTO/update-commande.dto';
+import { AddBoutiqueDto } from '../boutique/DTO/Add-boutique.dto';
 
 @Injectable()
 export class CommandeService {
@@ -11,11 +12,25 @@ export class CommandeService {
     @InjectRepository(CommandeEntity)
     private userRepository: Repository<CommandeEntity>,
   ) {}
-  async getUsers(): Promise<CommandeEntity[]> {
-    return await this.userRepository.find();
+  async getUsers(id: number) {
+    return this.userRepository.find({
+      where: [
+        {
+          user: Like(`%${id}%`),
+        },
+      ],
+    });
   }
-  async addCv(user: AddCommandeDto): Promise<CommandeEntity> {
-    return await this.userRepository.save(user);
+  async addCv(
+    boutique: AddCommandeDto,
+    user,
+    quantite,
+  ): Promise<CommandeEntity> {
+    const newBoutique = this.userRepository.create(boutique);
+    newBoutique.date = new Date();
+    newBoutique.quantite = quantite;
+    newBoutique.user = user;
+    return await this.userRepository.save(newBoutique);
   }
   async findById(id: number) {
     const utilisateur = await this.userRepository.findOne(id);

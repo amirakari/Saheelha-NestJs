@@ -7,22 +7,37 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandeService } from './commande.service';
 import { CommandeEntity } from './entities/commande.entity';
 import { AddCommandeDto } from './DTO/Add-commande.dto';
 import { UpdateCommandeDto } from './DTO/update-commande.dto';
+import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
+import { AddBoutiqueDto } from '../boutique/DTO/Add-boutique.dto';
+import { Request } from 'express';
 
 @Controller('commande')
 export class CommandeController {
   constructor(private userService: CommandeService) {}
-  @Get()
-  async getAllcvs(): Promise<CommandeEntity[]> {
-    return await this.userService.getUsers();
+  @Get(':id')
+  async getAllcvs(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getUsers(id);
   }
-  @Post()
-  async addCv(@Body() addCvDto: AddCommandeDto): Promise<CommandeEntity> {
-    return this.userService.addCv(addCvDto);
+  @Get('get/:id')
+  async getCommandeById(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findById(id);
+  }
+  @Post(':quantite')
+  @UseGuards(JwtAuthGuard)
+  async addCv(
+    @Body() addCvDto: AddCommandeDto,
+    @Req() request: Request,
+    @Param('quantite', ParseIntPipe) quantite: number,
+  ): Promise<CommandeEntity> {
+    const user = request.user;
+    return this.userService.addCv(addCvDto, user, quantite);
   }
   @Patch(':id')
   async updateCv(
