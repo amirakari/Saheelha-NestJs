@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommentaireEntity } from './entities/commentaire.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { AddCommentaireDto } from './DTO/Add-commentaire.dto';
 import { UpdateAbonnementDto } from '../abonnement/DTO/update-abonnement.dto';
 import { UpdateCommentaireDto } from './DTO/update-commentaire.dto';
 import { ProduitEntity } from '../produit/entities/produit.entity';
+import { UserEntity } from '../utilisateur/entities/user.entity';
 
 @Injectable()
 export class CommentaireService {
@@ -32,10 +33,22 @@ export class CommentaireService {
     return utilisateur;
   }
   async getCommentaireParProduit(id: number): Promise<CommentaireEntity[]> {
-    const qb = this.userRepository
+    return this.userRepository
       .createQueryBuilder('commentaire')
-      .where('commentaire.produit.id = :id', { id });
-    return qb.getMany();
+      .innerJoinAndMapOne(
+        'commentaire.produit',
+        ProduitEntity,
+        'produit',
+        'produit.id = commentaire.produit.id',
+      )
+      .innerJoinAndMapOne(
+        'commentaire.user',
+        UserEntity,
+        'user',
+        'user.id = commentaire.user.id',
+      )
+      .where('produit.id = :id', { id }) // or you can change condition to 'key.userId = :userId' because of you have `userI
+      .getMany();
   }
   async updateCv(
     id: number,
