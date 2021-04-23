@@ -73,10 +73,13 @@ export class ProduitController {
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutiqueDon(id);
   }
-  @Post()
+  @Post(':codeabare')
   @UseGuards(JwtAuthGuard)
-  async addCv(@Body() addCvDto: AddProduitDto): Promise<ProduitEntity> {
-    return this.userService.addCv(addCvDto);
+  async addCv(
+    @Body() addCvDto: AddProduitDto,
+    @Param('codeabare', ParseIntPipe) codeabare: number,
+  ): Promise<ProduitEntity> {
+    return this.userService.addCv(addCvDto, codeabare);
   }
   @Patch(':id')
   @UseGuards(JwtAuthGuard)

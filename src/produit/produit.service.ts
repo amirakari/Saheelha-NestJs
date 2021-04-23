@@ -87,8 +87,10 @@ export class ProduitService {
       ],
     });
   }
-  async addCv(user: AddProduitDto): Promise<ProduitEntity> {
-    return await this.userRepository.save(user);
+  async addCv(user: AddProduitDto, codeabare): Promise<ProduitEntity> {
+    const newBoutique = this.userRepository.create(user);
+    newBoutique.codeabare = codeabare;
+    return await this.userRepository.save(newBoutique);
   }
   async findById(id: number) {
     const utilisateur = await this.userRepository.findOne(id);

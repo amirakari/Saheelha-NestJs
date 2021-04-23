@@ -26,10 +26,6 @@ export class AddProduitDto {
   @IsNotEmpty()
   @Type(() => Number)
   @IsNumber()
-  codeabare: number;
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber()
   prixsansremise: number;
   @IsNotEmpty()
   @Type(() => Number)
