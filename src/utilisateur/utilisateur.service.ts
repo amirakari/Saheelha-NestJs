@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -17,10 +18,16 @@ import { ConfigService } from '@nestjs/config';
 import { ExtractJwt } from 'passport-jwt';
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { ForgotPasswordDto } from './DTO/forgot-password.dto';
+import { MailService } from '../mail/mail.service';
+import * as nodemailer from 'nodemailer';
+import { ChangePasswordDto } from './DTO/change-password.dto';
 @Injectable()
 export class UtilisateurService {
+  private readonly clientAppUrl: string;
   constructor(
     private configService: ConfigService,
+    private mailService: MailService,
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private jwtservice: JwtService,
@@ -86,5 +93,61 @@ export class UtilisateurService {
     } else {
       throw new NotFoundException('username ou password éronné');
     }
+  }
+  async ChangePassword(
+    id: number,
+    forgotPassword: ChangePasswordDto,
+  ): Promise<UserEntity> {
+    const hashedPassword = await bcrypt.hash(forgotPassword);
+    const newUser = await this.userRepository.preload({
+      id,
+      ...hashedPassword,
+    });
+    if (!newUser) {
+      throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
+    }
+    return await this.userRepository.save(newUser);
+  }
+  async forgotPassword(forgotPassword: ForgotPasswordDto): Promise<void> {
+    const { mail } = forgotPassword;
+    const utilisateur = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.mail = :mail', { mail })
+      .getOne();
+    const token = utilisateur.id;
+    const confirmLink = `${this.clientAppUrl}/utilisateur/forgotPassword?token=${token}`;
+    nodemailer.createTestAccount((err, account) => {
+      if (err) {
+        console.log(err);
+      }
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.sendgrid.net',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'apikey',
+          pass: process.env.SENDGRID_API_KEY,
+        },
+      });
+
+      const message = {
+        from: 'Sender Name <amir.akari@esprit.tn>',
+        to: utilisateur.mail,
+        subject: 'verify user',
+        html: `
+        <html>
+        <body>
+        <h3>Hello ${utilisateur.nom}</h3>
+        <p>please use this <a href="${confirmLink}">link</a>to reset your password</p>
+        </body>
+        </html>`,
+      };
+
+      transporter.sendMail(message, (err, info) => {
+        if (err) {
+          console.log('Error occurred. ' + err.message);
+        }
+      });
+    });
   }
 }

@@ -24,6 +24,7 @@ import { JwtStrategy } from './utilisateur/strategy/passport-jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { Strategy } from 'passport-jwt';
 import { FirstMiddleware } from './middlewares/first.middleware';
+import { MailModule } from './mail/mail.module';
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ dotenv.config();
     CommentaireModule,
     ListefavorisModule,
     EvaluationproduitModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy],

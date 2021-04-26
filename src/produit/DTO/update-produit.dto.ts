@@ -22,9 +22,7 @@ export class UpdateProduitDto {
   @IsString()
   status: string;
   @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  codeabare: number;
+  codeabare: bigint;
   @IsOptional()
   @Type(() => Number)
   @IsNumber()

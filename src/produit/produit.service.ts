@@ -100,10 +100,7 @@ export class ProduitService {
     return utilisateur;
   }
   async updateCv(id: number, user: UpdateProduitDto): Promise<ProduitEntity> {
-    const newUser = await this.userRepository.preload({
-      id,
-      ...user,
-    });
+    const newUser = await this.userRepository.preload({});
     if (!newUser) {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }
@@ -114,10 +111,7 @@ export class ProduitService {
     user: UpdateProduitDto,
     quantite: number,
   ): Promise<ProduitEntity> {
-    const newUser = await this.userRepository.preload({
-      id,
-      ...user,
-    });
+    const newUser = await this.userRepository.preload({});
     if (!newUser) {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }

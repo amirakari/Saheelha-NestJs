@@ -12,6 +12,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
 import { UtilisateurService } from './utilisateur.service';
@@ -30,6 +31,8 @@ import * as path from 'path';
 import { builders } from 'prettier/doc';
 import { doc } from 'prettier';
 import { v4 as uuidv4 } from 'uuid';
+import { ForgotPasswordDto } from './DTO/forgot-password.dto';
+import { ChangePasswordDto } from './DTO/change-password.dto';
 @Controller('utilisateur')
 export class UtilisateurController {
   constructor(
@@ -53,6 +56,20 @@ export class UtilisateurController {
   @Post('login')
   async Login(@Body() credentials: LoginCredentialsDto) {
     return this.userService.login(credentials);
+  }
+  @Post('/forgotPassword')
+  async forgotPassword(
+    @Body(new ValidationPipe()) forgotPassword: ForgotPasswordDto,
+  ): Promise<void> {
+    return this.userService.forgotPassword(forgotPassword);
+  }
+  @Patch('/ChangePassword')
+  @UseGuards(JwtAuthGuard)
+  async ChangePassword(
+    @Body(new ValidationPipe()) forgotPassword: ChangePasswordDto,
+    @Req() request: Request,
+  ): Promise<UserEntity> {
+    return this.userService.ChangePassword(1, forgotPassword);
   }
   @Patch(':id')
   @UseGuards(JwtAuthGuard)

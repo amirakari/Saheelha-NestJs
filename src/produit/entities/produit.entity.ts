@@ -28,7 +28,9 @@ export class ProduitEntity extends TimestampEntities {
   DLC: Date;
   @Column()
   nom: string;
-  @Column()
+  @Column({
+    type: 'bigint',
+  })
   codeabare: number;
   @Column()
   prixsansremise: number;

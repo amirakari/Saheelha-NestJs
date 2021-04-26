@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { JwtStrategy } from './strategy/passport-jwt.strategy';
 import { GoogleStrategy } from '../google.strategy';
+import { MailService } from '../mail/mail.service';
 dotenv.config();
 @Module({
   imports: [
@@ -23,6 +24,6 @@ dotenv.config();
     }),
   ],
   controllers: [UtilisateurController],
-  providers: [UtilisateurService, JwtStrategy],
+  providers: [UtilisateurService, JwtStrategy, MailService],
 })
 export class UtilisateurModule {}

@@ -30,13 +30,13 @@ export class BoutiqueEntity extends TimestampEntities {
   facebook: string;
   @Column()
   instagram: string;
-  @Column()
-  @Type(() => IsDecimal)
-  @IsNumber()
+  @Column({
+    type: 'double',
+  })
   mapLat: number;
-  @Column()
-  @Type(() => IsDecimal)
-  @IsNumber()
+  @Column({
+    type: 'double',
+  })
   mapLng: number;
   @Column()
   visite: string;
