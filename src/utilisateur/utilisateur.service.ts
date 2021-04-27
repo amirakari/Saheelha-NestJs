@@ -65,10 +65,16 @@ export class UtilisateurService {
     if (!newUser) {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }
+    newUser.salt = await bcrypt.genSalt();
+    newUser.password = await bcrypt.hash(newUser.password, newUser.salt);
     return await this.userRepository.save(newUser);
   }
   async softDeleteUser(id: number) {
-    return this.userRepository.softDelete(id);
+    const cv = await this.userRepository.findOne(id);
+    if (!cv) {
+      throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
+    }
+    return await this.userRepository.softRemove(cv);
   }
   async restoreUtilisateur(id: number) {
     this.userRepository.restore(id);
@@ -114,8 +120,7 @@ export class UtilisateurService {
       .createQueryBuilder('user')
       .where('user.mail = :mail', { mail })
       .getOne();
-    const token = utilisateur.id;
-    const confirmLink = `${this.clientAppUrl}/utilisateur/forgotPassword?token=${token}`;
+    const confirmLink = `http://localhost:4200/resetPassword/${utilisateur.id}`;
     nodemailer.createTestAccount((err, account) => {
       if (err) {
         console.log(err);
@@ -131,14 +136,14 @@ export class UtilisateurService {
       });
 
       const message = {
-        from: 'Sender Name <amir.akari@esprit.tn>',
+        from: 'Zéro Gaspii <amir.akari@esprit.tn>',
         to: utilisateur.mail,
-        subject: 'verify user',
+        subject: 'Réinitialiser votre mot de passe',
         html: `
         <html>
         <body>
-        <h3>Hello ${utilisateur.nom}</h3>
-        <p>please use this <a href="${confirmLink}">link</a>to reset your password</p>
+        <h3>Bonjour ${utilisateur.nom}</h3>
+        <p>s'il vous plaît utilisez  <a href="${confirmLink}">ce lien</a> pour réinitialiser votre mot de passe</p>
         </body>
         </html>`,
       };

@@ -43,7 +43,6 @@ export class UserEntity extends TimestampEntities {
   })
   password: string;
   @OneToMany((type) => BoutiqueEntity, (boutique) => boutique.user, {
-    cascade: true,
     nullable: true,
   })
   boutiques: BoutiqueEntity[];

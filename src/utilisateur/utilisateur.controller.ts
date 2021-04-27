@@ -63,13 +63,12 @@ export class UtilisateurController {
   ): Promise<void> {
     return this.userService.forgotPassword(forgotPassword);
   }
-  @Patch('/ChangePassword')
-  @UseGuards(JwtAuthGuard)
+  @Patch('/ChangePassword/:id')
   async ChangePassword(
-    @Body(new ValidationPipe()) forgotPassword: ChangePasswordDto,
-    @Req() request: Request,
+    @Body() updateUserDto: UpdateUserDto,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<UserEntity> {
-    return this.userService.ChangePassword(1, forgotPassword);
+    return await this.userService.updateCv(id, updateUserDto);
   }
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
@@ -114,6 +113,7 @@ export class UtilisateurController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async removeUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.softDeleteUser(id);
   }

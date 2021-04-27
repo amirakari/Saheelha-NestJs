@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryColumn,
@@ -48,7 +49,7 @@ export class BoutiqueEntity extends TimestampEntities {
   @Column({ type: 'enum', enum: BoutiqueDomaineEnum })
   domaine: string;
   @ManyToOne((type) => UserEntity, (user) => user.boutiques, {
-    cascade: ['insert', 'update'],
+    cascade: ['soft-remove', 'remove', 'update', 'insert'],
     nullable: true,
     eager: true,
   })
