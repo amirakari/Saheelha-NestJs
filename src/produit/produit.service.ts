@@ -22,11 +22,13 @@ export class ProduitService {
     private userRepository: Repository<ProduitEntity>,
   ) {}
   async getUsers(): Promise<ProduitEntity[]> {
-    const qb = this.userRepository
-      .createQueryBuilder('produit')
-      .where('produit.DLC > Now()')
-      .getMany();
-    return qb;
+    return this.userRepository.find({
+      where: [
+        {
+          DLC: Raw((alias) => `${alias} > NOW()`),
+        },
+      ],
+    });
   }
   async getProduitParBoutique(id: number): Promise<ProduitEntity[]> {
     const status = 'à vendre';
@@ -87,10 +89,22 @@ export class ProduitService {
       ],
     });
   }
-  async addCv(user: AddProduitDto, codeabare): Promise<ProduitEntity> {
+  async addCv(user: AddProduitDto, codeabare, boutique) {
     const newBoutique = this.userRepository.create(user);
     newBoutique.codeabare = codeabare;
-    return await this.userRepository.save(newBoutique);
+    newBoutique.boutique = boutique;
+    const code = newBoutique.codeabare.toString();
+    const now = new Date();
+    if (
+      code.length == 13 &&
+      newBoutique.prixavecremise < newBoutique.prixsansremise
+    ) {
+      return await this.userRepository.save(newBoutique);
+    } else {
+      console.log(newBoutique.DLC);
+      console.log(now);
+      throw new NotFoundException(`l'utilisateur d'id  n'existe pas`);
+    }
   }
   async findById(id: number) {
     const utilisateur = await this.userRepository.findOne(id);

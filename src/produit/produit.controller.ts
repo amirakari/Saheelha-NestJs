@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ProduitService } from './produit.service';
@@ -15,10 +16,15 @@ import { ProduitEntity } from './entities/produit.entity';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
+import { Request } from 'express';
+import { BoutiqueService } from '../boutique/boutique.service';
 
 @Controller('produit')
 export class ProduitController {
-  constructor(private userService: ProduitService) {}
+  constructor(
+    private userService: ProduitService,
+    private boutiqueService: BoutiqueService,
+  ) {}
   @Get()
   async getAllcvs(): Promise<ProduitEntity[]> {
     return await this.userService.getUsers();
@@ -73,13 +79,16 @@ export class ProduitController {
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutiqueDon(id);
   }
-  @Post(':codeabare')
+  @Post(':codeabare/:id')
   @UseGuards(JwtAuthGuard)
   async addCv(
     @Body() addCvDto: AddProduitDto,
     @Param('codeabare', ParseIntPipe) codeabare: number,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<ProduitEntity> {
-    return this.userService.addCv(addCvDto, codeabare);
+    const boutique = await this.boutiqueService.findById(id);
+    console.log(boutique);
+    return this.userService.addCv(addCvDto, codeabare, boutique);
   }
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
