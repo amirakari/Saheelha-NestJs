@@ -9,7 +9,10 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProduitService } from './produit.service';
 import { ProduitEntity } from './entities/produit.entity';
@@ -18,7 +21,11 @@ import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { Request } from 'express';
 import { BoutiqueService } from '../boutique/boutique.service';
-
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { UpdateBoutiqueDto } from '../boutique/DTO/update-boutique.dto';
+import { User } from '../decorators/user.decorator';
+import { MulterModule } from '@nestjs/platform-express';
 @Controller('produit')
 export class ProduitController {
   constructor(
@@ -70,6 +77,17 @@ export class ProduitController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutique(id);
+  }
+  @Post('upload')
+  @UseInterceptors(
+    FilesInterceptor('files', 5, {
+      storage: diskStorage({
+        destination: './uploads/imagesproduit',
+      }),
+    }),
+  )
+  uploadfile(@UploadedFiles() files: Express.Multer.File) {
+    return files;
   }
   @Get('boutique1/:id')
   async getproduitbyId1(

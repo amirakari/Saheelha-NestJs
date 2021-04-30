@@ -25,6 +25,8 @@ import { GoogleStrategy } from './google.strategy';
 import { Strategy } from 'passport-jwt';
 import { FirstMiddleware } from './middlewares/first.middleware';
 import { MailModule } from './mail/mail.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 dotenv.config();
 
