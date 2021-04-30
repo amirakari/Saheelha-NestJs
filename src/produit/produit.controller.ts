@@ -66,14 +66,12 @@ export class ProduitController {
     return await this.userService.findById(id);
   }
   @Get('boutique/:id')
-  @UseGuards(JwtAuthGuard)
   async getproduitbyId(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutique(id);
   }
   @Get('boutique1/:id')
-  @UseGuards(JwtAuthGuard)
   async getproduitbyId1(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProduitEntity[]> {
