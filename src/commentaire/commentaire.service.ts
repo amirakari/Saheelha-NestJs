@@ -20,9 +20,11 @@ export class CommentaireService {
   async addCv(
     commentaire: AddCommentaireDto,
     user,
+    produit,
   ): Promise<CommentaireEntity> {
     const newBoutique = this.userRepository.create(commentaire);
     newBoutique.user = user;
+    newBoutique.produit = produit;
     return await this.userRepository.save(newBoutique);
   }
   async findById(id: number) {

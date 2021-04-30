@@ -104,12 +104,12 @@ export class ProduitController {
     @Body() updateUserDto: UpdateProduitDto,
     @Param('id', ParseIntPipe) id: number,
     @Param('quantite', ParseIntPipe) quantite: number,
-  ): Promise<ProduitEntity> {
-    return await this.userService.ajouterProduitaupanier(
-      id,
-      updateUserDto,
-      quantite,
-    );
+  ) {
+    const produit = await this.userService.findById(id);
+    produit.quantite = produit.quantite - quantite;
+    updateUserDto.quantite = produit.quantite;
+    console.log(updateUserDto.quantite);
+    await this.userService.updateCv(id, updateUserDto);
   }
   @Get('amir/:id')
   async rechercheParPanier(@Param('id', ParseIntPipe) id: number) {

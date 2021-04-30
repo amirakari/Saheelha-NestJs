@@ -19,22 +19,28 @@ import { UpdateCommentaireDto } from './DTO/update-commentaire.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { Request } from 'express';
 import { ProduitEntity } from '../produit/entities/produit.entity';
+import { ProduitService } from '../produit/produit.service';
 
 @Controller('commentaire')
 export class CommentaireController {
-  constructor(private userService: CommentaireService) {}
+  constructor(
+    private userService: CommentaireService,
+    private produitService: ProduitService,
+  ) {}
   @Get()
   async getAllcvs(): Promise<CommentaireEntity[]> {
     return await this.userService.getUsers();
   }
-  @Post()
+  @Post(':id')
   @UseGuards(JwtAuthGuard)
   async addCv(
     @Body() addCvDto: AddCommentaireDto,
     @Req() request: Request,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<CommentaireEntity> {
     const user = request.user;
-    return this.userService.addCv(addCvDto, user);
+    const boutique = await this.produitService.findById(id);
+    return this.userService.addCv(addCvDto, user, boutique);
   }
   @Get('produit/:id')
   @UseGuards(JwtAuthGuard)

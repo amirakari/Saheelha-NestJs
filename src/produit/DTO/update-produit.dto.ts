@@ -1,6 +1,7 @@
 import { Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsDate,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -9,6 +10,8 @@ import {
 import { Type } from 'class-transformer';
 
 export class UpdateProduitDto {
+  @IsOptional()
+  id: number;
   @IsOptional()
   @IsString()
   categorie: string;
@@ -22,8 +25,6 @@ export class UpdateProduitDto {
   @IsString()
   status: string;
   @IsOptional()
-  codeabare: bigint;
-  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   prixsansremise: number;
@@ -32,7 +33,7 @@ export class UpdateProduitDto {
   @IsNumber()
   quantite: number;
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   DLC: Date;
   @IsOptional()
   @Type(() => Number)

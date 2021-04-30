@@ -25,10 +25,12 @@ export class CommandeService {
     boutique: AddCommandeDto,
     user,
     quantite,
+    produit,
   ): Promise<CommandeEntity> {
     const newBoutique = this.userRepository.create(boutique);
     newBoutique.date = new Date();
     newBoutique.quantite = quantite;
+    newBoutique.produit = produit;
     newBoutique.user = user;
     return await this.userRepository.save(newBoutique);
   }

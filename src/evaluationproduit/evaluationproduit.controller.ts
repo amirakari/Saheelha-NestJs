@@ -1,4 +1,42 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
+import { ProduitService } from '../produit/produit.service';
+import { EvaluationproduitService } from './evaluationproduit.service';
+import { AddEvaluationDto } from './DTO/Add-evaluation.dto';
+import { Request } from 'express';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 
 @Controller('evaluationproduit')
-export class EvaluationproduitController {}
+export class EvaluationproduitController {
+  constructor(
+    private userService: EvaluationproduitService,
+    private produitService: ProduitService,
+  ) {}
+  @Post(':id')
+  @UseGuards(JwtAuthGuard)
+  async addCv(
+    @Body() addCvDto: AddEvaluationDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request,
+  ) {
+    const boutique = await this.produitService.findById(id);
+    console.log(boutique);
+    const user = request.user;
+    return this.userService.addCv(addCvDto, boutique, user);
+  }
+  @Get('produit/:id')
+  @UseGuards(JwtAuthGuard)
+  async getproduitbyId(@Param('id', ParseIntPipe) id: number) {
+    const evalution = await this.userService.getProduitParBoutique(id);
+    return evalution;
+  }
+}

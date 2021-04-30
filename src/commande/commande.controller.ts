@@ -17,10 +17,14 @@ import { UpdateCommandeDto } from './DTO/update-commande.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { AddBoutiqueDto } from '../boutique/DTO/Add-boutique.dto';
 import { Request } from 'express';
+import { ProduitService } from '../produit/produit.service';
 
 @Controller('commande')
 export class CommandeController {
-  constructor(private userService: CommandeService) {}
+  constructor(
+    private userService: CommandeService,
+    private produitService: ProduitService,
+  ) {}
   @Get(':id')
   async getAllcvs(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUsers(id);
@@ -29,15 +33,17 @@ export class CommandeController {
   async getCommandeById(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.findById(id);
   }
-  @Post(':quantite')
+  @Post(':quantite/:id')
   @UseGuards(JwtAuthGuard)
   async addCv(
     @Body() addCvDto: AddCommandeDto,
     @Req() request: Request,
+    @Param('id', ParseIntPipe) id: number,
     @Param('quantite', ParseIntPipe) quantite: number,
   ): Promise<CommandeEntity> {
     const user = request.user;
-    return this.userService.addCv(addCvDto, user, quantite);
+    const boutique = await this.produitService.findById(id);
+    return this.userService.addCv(addCvDto, user, quantite, boutique);
   }
   @Patch(':id')
   async updateCv(

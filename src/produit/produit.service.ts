@@ -26,6 +26,7 @@ export class ProduitService {
       where: [
         {
           DLC: Raw((alias) => `${alias} > NOW()`),
+          quantite: Raw((alias) => `${alias} > 0`),
         },
       ],
     });
@@ -37,6 +38,7 @@ export class ProduitService {
       .where('produit.boutique.id = :id', { id })
       .andWhere('produit.status = :status', { status })
       .andWhere('produit.DLC > Now()')
+      .andWhere('produit.quantite > 0')
       .getMany();
     return qb;
   }
@@ -47,6 +49,7 @@ export class ProduitService {
       .where('produit.boutique.id = :id', { id })
       .andWhere('produit.status = :status', { status })
       .andWhere('produit.DLC > Now()')
+      .andWhere('produit.quantite > 0')
       .getMany();
     return qb;
   }
@@ -114,22 +117,13 @@ export class ProduitService {
     return utilisateur;
   }
   async updateCv(id: number, user: UpdateProduitDto): Promise<ProduitEntity> {
-    const newUser = await this.userRepository.preload({});
+    const newUser = await this.userRepository.preload({
+      id,
+      ...user,
+    });
     if (!newUser) {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }
-    return await this.userRepository.save(newUser);
-  }
-  async ajouterProduitaupanier(
-    id: number,
-    user: UpdateProduitDto,
-    quantite: number,
-  ): Promise<ProduitEntity> {
-    const newUser = await this.userRepository.preload({});
-    if (!newUser) {
-      throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
-    }
-    newUser.quantite = newUser.quantite - quantite;
     return await this.userRepository.save(newUser);
   }
   async findByPanierId(id: number) {
