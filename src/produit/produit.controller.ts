@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -26,8 +27,11 @@ import { diskStorage } from 'multer';
 import { UpdateBoutiqueDto } from '../boutique/DTO/update-boutique.dto';
 import { User } from '../decorators/user.decorator';
 import { MulterModule } from '@nestjs/platform-express';
+import { Observable, of } from 'rxjs';
+import { join } from 'path';
 @Controller('produit')
 export class ProduitController {
+  i: number;
   constructor(
     private userService: ProduitService,
     private boutiqueService: BoutiqueService,
@@ -78,16 +82,31 @@ export class ProduitController {
   ): Promise<ProduitEntity[]> {
     return await this.userService.getProduitParBoutique(id);
   }
-  @Post('upload')
+  @Post('upload/:id')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FilesInterceptor('files', 5, {
+    FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads/imagesproduit',
       }),
     }),
   )
-  uploadfile(@UploadedFiles() files: Express.Multer.File) {
-    return files;
+  uploadfile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() request: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateProduitDto,
+    @User() user,
+  ): Promise<any> {
+    updateUserDto.photo1 = file.filename;
+    console.log(updateUserDto);
+    return this.userService.updateCv(id, updateUserDto);
+  }
+  @Get('image/:image')
+  findProfileImage(@Res() res, @Param('image') image): Observable<any> {
+    return of(
+      res.sendFile(join(process.cwd(), 'uploads/imagesproduit/' + image)),
+    );
   }
   @Get('boutique1/:id')
   async getproduitbyId1(

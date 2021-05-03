@@ -5,6 +5,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -23,7 +24,7 @@ export class AddProduitDto {
   @IsNotEmpty()
   @IsString()
   status: string;
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   prixsansremise: number;
@@ -34,7 +35,7 @@ export class AddProduitDto {
   @IsNotEmpty()
   @IsDateString()
   DLC: Date;
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   prixavecremise: number;

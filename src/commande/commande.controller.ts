@@ -43,6 +43,8 @@ export class CommandeController {
   ): Promise<CommandeEntity> {
     const user = request.user;
     const boutique = await this.produitService.findById(id);
+    addCvDto.prixtotale = quantite * boutique.prixavecremise;
+    console.log(addCvDto.prixtotale);
     return this.userService.addCv(addCvDto, user, quantite, boutique);
   }
   @Patch(':id')

@@ -34,6 +34,8 @@ export class ProduitEntity extends TimestampEntities {
   codeabare: number;
   @Column()
   prixsansremise: number;
+  @Column({ nullable: true })
+  photo1: string;
   @Column()
   quantite: number;
   @Column({ type: 'enum', enum: ProduitStatusEnum })

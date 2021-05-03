@@ -19,6 +19,8 @@ export class CommandeEntity extends TimestampEntities {
   date: Date;
   @Column()
   quantite: number;
+  @Column()
+  prixtotale: number;
   @ManyToOne((type) => UserEntity, (user) => user.commandes, {
     cascade: ['insert', 'update'],
     nullable: true,

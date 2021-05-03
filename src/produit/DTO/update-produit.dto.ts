@@ -36,6 +36,9 @@ export class UpdateProduitDto {
   @IsDateString()
   DLC: Date;
   @IsOptional()
+  @IsString()
+  photo1: string;
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   prixavecremise: number;

@@ -99,9 +99,13 @@ export class ProduitService {
     const code = newBoutique.codeabare.toString();
     const now = new Date();
     if (
+      newBoutique.status === 'à vendre' &&
       code.length == 13 &&
       newBoutique.prixavecremise < newBoutique.prixsansremise
     ) {
+      return await this.userRepository.save(newBoutique);
+    }
+    if (newBoutique.status === 'à donner' && code.length == 13) {
       return await this.userRepository.save(newBoutique);
     } else {
       console.log(newBoutique.DLC);
