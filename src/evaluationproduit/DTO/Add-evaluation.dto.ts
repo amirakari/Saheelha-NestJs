@@ -10,9 +10,4 @@ import {
 import { Type } from 'class-transformer';
 import { BoutiqueEntity } from '../../boutique/entities/boutique.entity';
 
-export class AddEvaluationDto {
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber()
-  note: number;
-}
+export class AddEvaluationDto {}

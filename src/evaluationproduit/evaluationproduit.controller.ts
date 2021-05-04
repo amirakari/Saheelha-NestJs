@@ -21,17 +21,18 @@ export class EvaluationproduitController {
     private userService: EvaluationproduitService,
     private produitService: ProduitService,
   ) {}
-  @Post(':id')
+  @Post(':id/:note')
   @UseGuards(JwtAuthGuard)
   async addCv(
     @Body() addCvDto: AddEvaluationDto,
     @Param('id', ParseIntPipe) id: number,
+    @Param('note', ParseIntPipe) note: number,
     @Req() request: Request,
   ) {
     const boutique = await this.produitService.findById(id);
     console.log(boutique);
     const user = request.user;
-    return this.userService.addCv(addCvDto, boutique, user);
+    return this.userService.addCv(addCvDto, note, boutique, user);
   }
   @Get('produit/:id')
   @UseGuards(JwtAuthGuard)

@@ -11,10 +11,11 @@ export class EvaluationproduitService {
     @InjectRepository(EvaluationproduitEntity)
     private userRepository: Repository<EvaluationproduitEntity>,
   ) {}
-  async addCv(evaluation: AddEvaluationDto, produit, user) {
+  async addCv(evaluation: AddEvaluationDto, note, produit, user) {
     const newBoutique = this.userRepository.create(evaluation);
     newBoutique.produit = produit;
     newBoutique.user = user;
+    newBoutique.note = note;
     return await this.userRepository.save(newBoutique);
   }
   async getProduitParBoutique(id: number) {
