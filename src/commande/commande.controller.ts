@@ -29,6 +29,54 @@ export class CommandeController {
   async getAllcvs(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUsers(id);
   }
+  @Get('Mai/:id')
+  async getCommandeEnMai(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnMai(id);
+  }
+  @Get('Janvier/:id')
+  async getCommandeEnJanvier(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnJanvier(id);
+  }
+  @Get('Fevrier/:id')
+  async getCommandeEnFevier(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnFevrier(id);
+  }
+  @Get('Mars/:id')
+  async getCommandeEnMars(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnMars(id);
+  }
+  @Get('Avril/:id')
+  async getCommandeEnAvril(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnAvril(id);
+  }
+  @Get('Juin/:id')
+  async getCommandeEnJuin(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnJuin(id);
+  }
+  @Get('Juillet/:id')
+  async getCommandeEnJuillet(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnJuillet(id);
+  }
+  @Get('Aout/:id')
+  async getCommandeEnAout(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnAout(id);
+  }
+  @Get('Septembre/:id')
+  async getCommandeEnSeptembre(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnSeptembre(id);
+  }
+  @Get('Octobre/:id')
+  async getCommandeEnOctobre(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnOctobre(id);
+  }
+  @Get('Novembre/:id')
+  async getCommandeEnNovembre(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnNovembre(id);
+  }
+  @Get('Decembre/:id')
+  async getCommandeEnDecembre(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandeEnDecembre(id);
+  }
   @Get('get/:id')
   async getCommandeById(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.findById(id);
