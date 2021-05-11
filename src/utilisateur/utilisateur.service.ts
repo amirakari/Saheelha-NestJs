@@ -5,7 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { LoginCredentialsDto } from './DTO/login-credentials.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -154,5 +154,50 @@ export class UtilisateurService {
         }
       });
     });
+  }
+  async envoiemail() {
+    const type = 'user';
+    const qb = await getConnection()
+      .createQueryBuilder()
+      .select('user.mail', 'mail')
+      .from(UserEntity, 'user')
+      .where('user.type = :type', { type })
+      .getRawMany();
+    for (let i = 0; i < qb.length; i++) {
+      console.log(qb[i].mail);
+      nodemailer.createTestAccount((err, account) => {
+        if (err) {
+          console.log(err);
+        }
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.sendgrid.net',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'apikey',
+            pass: process.env.SENDGRID_API_KEY,
+          },
+        });
+        const message = {
+          from: 'Zéro Gaspii <amir.akari@esprit.tn>',
+          to: qb[i].mail,
+          subject: 'Réinitialiser votre mot de passe',
+          html: `
+        <html>
+        <body>
+        <h3>le magasin aziza</h3>
+        <p>s'il vous plaît utilisez  pour réinitialiser votre mot de passe</p>
+        </body>
+        </html>`,
+        };
+
+        transporter.sendMail(message, (err, info) => {
+          if (err) {
+            console.log('Error occurred. ' + err.message);
+          }
+        });
+      });
+    }
+    /**/
   }
 }

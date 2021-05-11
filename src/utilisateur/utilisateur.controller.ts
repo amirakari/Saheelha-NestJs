@@ -121,4 +121,8 @@ export class UtilisateurController {
   async recoverUtilisateur(@Param('id', ParseIntPipe) id: number) {
     this.userService.restoreUtilisateur(id);
   }
+  @Get('envoie')
+  async getusers() {
+    return await this.userService.envoiemail();
+  }
 }

@@ -5,16 +5,20 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from './entities/produit.entity';
-import { Like, Raw, Repository } from 'typeorm';
+import { getConnection, Like, Raw, Repository } from 'typeorm';
 import { AddProduitDto } from './DTO/Add-produit.dto';
 import { UpdateProduitDto } from './DTO/update-produit.dto';
 import { UserTypeEnum } from '../enums/user.type.enum';
 import { User } from '../decorators/user.decorator';
 import { Observable } from 'rxjs';
 import { PanierEntity } from '../listefavoris/entities/panier.entity';
+import * as nodemailer from 'nodemailer';
+import { EvaluationproduitEntity } from '../evaluationproduit/entities/evaluationproduit.entity';
+import { UserEntity } from '../utilisateur/entities/user.entity';
 
 @Injectable()
 export class ProduitService {
+  confirmLink = '';
   constructor(
     @InjectRepository(PanierEntity)
     private PanierRepository: Repository<PanierEntity>,
@@ -98,14 +102,105 @@ export class ProduitService {
     newBoutique.boutique = boutique;
     const code = newBoutique.codeabare.toString();
     const now = new Date();
+    if (newBoutique.status === 'à vendre') {
+      this.confirmLink = `http://localhost:4200/boutique/${newBoutique.boutique.id}/produitboutique`;
+    } else {
+      this.confirmLink = `http://localhost:4200/boutique/${newBoutique.boutique.id}/produitboutique/don`;
+    }
     if (
       newBoutique.status === 'à vendre' &&
       code.length == 13 &&
       newBoutique.prixavecremise < newBoutique.prixsansremise
     ) {
+      const type = 'user';
+      const qb = await getConnection()
+        .createQueryBuilder()
+        .select('user.mail', 'mail')
+        .from(UserEntity, 'user')
+        .where('user.type = :type', { type })
+        .getRawMany();
+      for (let i = 0; i < qb.length; i++) {
+        console.log(qb[i].mail);
+        nodemailer.createTestAccount((err, account) => {
+          if (err) {
+            console.log(err);
+          }
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.sendgrid.net',
+            port: 465,
+            secure: true,
+            auth: {
+              user: 'apikey',
+              pass: process.env.SENDGRID_API_KEY,
+            },
+          });
+          const message = {
+            from: 'Zéro Gaspii <amir.akari@esprit.tn>',
+            to: qb[i].mail,
+            subject:
+              'Un nouveau produit est ajouté dans notre plateforme Zéro Gaspii',
+            html: `
+        <html>
+        <body>
+        
+        <h3>le ${newBoutique.boutique.domaine} ${newBoutique.boutique.nom} a ajouté un nouveau produit</h3>
+        <p>Vous pouvez trouver le produit ${newBoutique.nom} sur <a href="${this.confirmLink}">ce lien</a> 
+        </p>
+        </body>
+        </html>`,
+          };
+          transporter.sendMail(message, (err, info) => {
+            if (err) {
+              console.log('Error occurred. ' + err.message);
+            }
+          });
+        });
+      }
       return await this.userRepository.save(newBoutique);
     }
     if (newBoutique.status === 'à donner' && code.length == 13) {
+      const type = 'user';
+      const qb = await getConnection()
+        .createQueryBuilder()
+        .select('user.mail', 'mail')
+        .from(UserEntity, 'user')
+        .where('user.type = :type', { type })
+        .getRawMany();
+      for (let i = 0; i < qb.length; i++) {
+        console.log(qb[i].mail);
+        nodemailer.createTestAccount((err, account) => {
+          if (err) {
+            console.log(err);
+          }
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.sendgrid.net',
+            port: 465,
+            secure: true,
+            auth: {
+              user: 'apikey',
+              pass: process.env.SENDGRID_API_KEY,
+            },
+          });
+          const message = {
+            from: 'Zéro Gaspii <amir.akari@esprit.tn>',
+            to: qb[i].mail,
+            subject:
+              'Un nouveau produit est ajouté dans notre plateforme Zéro Gaspii',
+            html: `
+        <html>
+        <body>
+        <h3>le ${newBoutique.boutique.domaine} ${newBoutique.boutique.nom} a ajouté un nouveau produit</h3>
+        <p>Vous pouvez trouver le produit ${newBoutique.nom} sur<a href="${this.confirmLink}">ce lien</a> </p>
+        </body>
+        </html>`,
+          };
+          transporter.sendMail(message, (err, info) => {
+            if (err) {
+              console.log('Error occurred. ' + err.message);
+            }
+          });
+        });
+      }
       return await this.userRepository.save(newBoutique);
     } else {
       console.log(newBoutique.DLC);
