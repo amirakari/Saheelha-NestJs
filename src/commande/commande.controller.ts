@@ -29,6 +29,10 @@ export class CommandeController {
   async getAllcvs(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUsers(id);
   }
+  @Get('boutique/:id')
+  async getCommandebyboutique(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getCommandebyboutique(id);
+  }
   @Get('Mai/:id')
   async getCommandeEnMai(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getCommandeEnMai(id);

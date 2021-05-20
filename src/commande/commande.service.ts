@@ -59,6 +59,15 @@ export class CommandeService {
   async restoreUtilisateur(id: number) {
     this.userRepository.restore(id);
   }
+  async getCommandebyboutique(id: number) {
+    return this.userRepository.find({
+      where: [
+        {
+          produit: Like(`%${id}%`),
+        },
+      ],
+    });
+  }
   async getCommandeEnMai(id: number) {
     const qb = this.userRepository
       .createQueryBuilder('commande')
