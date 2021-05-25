@@ -15,7 +15,8 @@ import { PanierEntity } from '../listefavoris/entities/panier.entity';
 import * as nodemailer from 'nodemailer';
 import { EvaluationproduitEntity } from '../evaluationproduit/entities/evaluationproduit.entity';
 import { UserEntity } from '../utilisateur/entities/user.entity';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Injectable()
 export class ProduitService {
   confirmLink = '';
@@ -103,9 +104,13 @@ export class ProduitService {
     const code = newBoutique.codeabare.toString();
     const now = new Date();
     if (newBoutique.status === 'à vendre') {
-      this.confirmLink = `http://localhost:4200/boutique/${newBoutique.boutique.id}/produitboutique`;
+      this.confirmLink =
+        process.env.Mail +
+        `/boutique/${newBoutique.boutique.id}/produitboutique`;
     } else {
-      this.confirmLink = `http://localhost:4200/boutique/${newBoutique.boutique.id}/produitboutique/don`;
+      this.confirmLink =
+        process.env.Mail +
+        `/boutique/${newBoutique.boutique.id}/produitboutique/don`;
     }
     if (
       newBoutique.status === 'à vendre' &&

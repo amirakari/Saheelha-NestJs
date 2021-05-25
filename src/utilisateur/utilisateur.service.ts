@@ -22,6 +22,8 @@ import { ForgotPasswordDto } from './DTO/forgot-password.dto';
 import { MailService } from '../mail/mail.service';
 import * as nodemailer from 'nodemailer';
 import { ChangePasswordDto } from './DTO/change-password.dto';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Injectable()
 export class UtilisateurService {
   private readonly clientAppUrl: string;
@@ -120,7 +122,7 @@ export class UtilisateurService {
       .createQueryBuilder('user')
       .where('user.mail = :mail', { mail })
       .getOne();
-    const confirmLink = `http://localhost:4200/resetPassword/${utilisateur.id}`;
+    const confirmLink = process.env.Mail + `/resetPassword/${utilisateur.id}`;
     nodemailer.createTestAccount((err, account) => {
       if (err) {
         console.log(err);
