@@ -15,7 +15,7 @@ export class AbonnementService {
   async getUsers(): Promise<AbonnementEntity[]> {
     return await this.userRepository.find();
   }
-  async addCv1(): Promise<InsertResult> {
+  async addCv1(boutique): Promise<InsertResult> {
     const qb = this.userRepository.createQueryBuilder('abonnement');
     return await qb
       .insert()
@@ -24,10 +24,11 @@ export class AbonnementService {
         durée: '1 moi',
         status: 'non payé',
         prix: 10,
+        boutique: boutique,
       })
       .execute();
   }
-  async addCv2(): Promise<InsertResult> {
+  async addCv2(boutique): Promise<InsertResult> {
     const qb = this.userRepository.createQueryBuilder('abonnement');
     return await qb
       .insert()
@@ -36,10 +37,11 @@ export class AbonnementService {
         durée: '3 mois',
         status: 'non payé',
         prix: 20,
+        boutique: boutique,
       })
       .execute();
   }
-  async addCv3(): Promise<InsertResult> {
+  async addCv3(boutique): Promise<InsertResult> {
     const qb = this.userRepository.createQueryBuilder('abonnement');
     return await qb
       .insert()
@@ -48,6 +50,7 @@ export class AbonnementService {
         durée: '12 mois',
         status: 'non payé',
         prix: 100,
+        boutique: boutique,
       })
       .execute();
   }

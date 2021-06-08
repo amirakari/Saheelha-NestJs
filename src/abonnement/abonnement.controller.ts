@@ -15,28 +15,38 @@ import { AddAbonnementDto } from './DTO/Add-abonnement.dto';
 import { UpdateAbonnementDto } from './DTO/update-abonnement.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { InsertResult } from 'typeorm';
+import { BoutiqueService } from '../boutique/boutique.service';
 
 @Controller('abonnement')
 export class AbonnementController {
-  constructor(private userService: AbonnementService) {}
+  constructor(
+    private userService: AbonnementService,
+    private boutiqueService: BoutiqueService,
+  ) {}
   @Get()
   async getAllcvs(): Promise<AbonnementEntity[]> {
     return await this.userService.getUsers();
   }
-  @Post('abo1')
+  @Post('abo1/:id')
   @UseGuards(JwtAuthGuard)
-  async addCv10(): Promise<InsertResult> {
-    return await this.userService.addCv1();
+  async addCv10(@Param('id', ParseIntPipe) id: number): Promise<InsertResult> {
+    const boutique = await this.boutiqueService.findById(id);
+    console.log(boutique);
+    return await this.userService.addCv1(boutique);
   }
-  @Post('abo2')
+  @Post('abo2/:id')
   @UseGuards(JwtAuthGuard)
-  async addCv20(): Promise<InsertResult> {
-    return await this.userService.addCv2();
+  async addCv20(@Param('id', ParseIntPipe) id: number): Promise<InsertResult> {
+    const boutique = await this.boutiqueService.findById(id);
+    console.log(boutique);
+    return await this.userService.addCv2(boutique);
   }
-  @Post('abo3')
+  @Post('abo3/:id')
   @UseGuards(JwtAuthGuard)
-  async addCv100(): Promise<InsertResult> {
-    return await this.userService.addCv3();
+  async addCv100(@Param('id', ParseIntPipe) id: number): Promise<InsertResult> {
+    const boutique = await this.boutiqueService.findById(id);
+    console.log(boutique);
+    return await this.userService.addCv3(boutique);
   }
   @Patch(':id')
   async updateCv(
