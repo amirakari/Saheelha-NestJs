@@ -9,10 +9,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const corsOptions = {
-    origin: ['http://zerogaspii.com:4200'],
-  };
-  app.enableCors(corsOptions);
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
   await app.listen(configService.get('APP_PORT'));
