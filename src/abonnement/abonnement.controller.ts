@@ -16,6 +16,7 @@ import { UpdateAbonnementDto } from './DTO/update-abonnement.dto';
 import { JwtAuthGuard } from '../Guards/jwt-auth.guard';
 import { InsertResult } from 'typeorm';
 import { BoutiqueService } from '../boutique/boutique.service';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 
 @Controller('abonnement')
 export class AbonnementController {
@@ -62,5 +63,11 @@ export class AbonnementController {
   @Get('/recover/:id')
   async recoverUtilisateur(@Param('id', ParseIntPipe) id: number) {
     this.userService.restoreUtilisateur(id);
+  }
+  @Get('boutique/:id')
+  async getproduitbyId(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<AbonnementEntity[]> {
+    return await this.userService.getAboParBoutique(id);
   }
 }

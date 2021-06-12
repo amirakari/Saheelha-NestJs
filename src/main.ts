@@ -10,7 +10,7 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const corsOptions = {
-    origin: ['http://localhost:4200'],
+    origin: ['http://zerogaspii.com:4200'],
   };
   app.enableCors(corsOptions);
   app.useGlobalPipes(new ValidationPipe());

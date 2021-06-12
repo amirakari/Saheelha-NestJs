@@ -4,6 +4,7 @@ import { UpdateAbonnementDto } from './DTO/update-abonnement.dto';
 import { AddAbonnementDto } from './DTO/Add-abonnement.dto';
 import { InsertResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 
 @Injectable()
 export class AbonnementService {
@@ -79,5 +80,12 @@ export class AbonnementService {
   }
   async restoreUtilisateur(id: number) {
     this.userRepository.restore(id);
+  }
+  async getAboParBoutique(id: number): Promise<AbonnementEntity[]> {
+    const qb = this.userRepository
+      .createQueryBuilder('produit')
+      .where('produit.boutique.id = :id', { id })
+      .getMany();
+    return qb;
   }
 }

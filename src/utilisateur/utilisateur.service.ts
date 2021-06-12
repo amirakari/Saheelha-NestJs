@@ -136,7 +136,6 @@ export class UtilisateurService {
           pass: process.env.SENDGRID_API_KEY,
         },
       });
-
       const message = {
         from: 'Zéro Gaspii <amir.akari@esprit.tn>',
         to: utilisateur.mail,
