@@ -2,27 +2,21 @@ import { Injectable } from '@nestjs/common';
 import * as Mailgun from 'mailgun-js';
 import { MailInterface } from './interface/mail.interface';
 import * as nodemailer from 'nodemailer';
+import * as google from 'googleapis';
 @Injectable()
 export class MailService {
-  private mg: Mailgun.Mailgun;
-  constructor() {
-    this.mg = Mailgun({
-      apiKey: process.env.MAILGUN_API_KEY,
-      domain: process.env.MAILGUN_API_DOMAIN,
-    });
-  }
   async send() {
     nodemailer.createTestAccount((err, account) => {
       if (err) {
         console.log(err);
       }
       const transporter = nodemailer.createTransport({
-        host: 'smtp.sendgrid.net',
-        port: 465,
-        secure: true,
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
         auth: {
-          user: 'apikey',
-          pass: process.env.SENDGRID_API_KEY,
+          user: 'amir.akari@esprit.tn',
+          pass: '183JMT1875',
         },
       });
 

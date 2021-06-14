@@ -128,12 +128,12 @@ export class UtilisateurService {
         console.log(err);
       }
       const transporter = nodemailer.createTransport({
-        host: 'smtp.sendgrid.net',
-        port: 465,
-        secure: true,
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
         auth: {
-          user: 'apikey',
-          pass: process.env.SENDGRID_API_KEY,
+          user: 'amir.akari@esprit.tn',
+          pass: '183JMT1875',
         },
       });
       const message = {

@@ -131,9 +131,9 @@ export class ProduitService {
             console.log(err);
           }
           const transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 465,
-            secure: true,
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
               user: 'apikey',
               pass: process.env.SENDGRID_API_KEY,
@@ -178,9 +178,9 @@ export class ProduitService {
             console.log(err);
           }
           const transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 465,
-            secure: true,
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
               user: 'apikey',
               pass: process.env.SENDGRID_API_KEY,
