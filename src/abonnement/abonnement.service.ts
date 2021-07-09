@@ -88,4 +88,17 @@ export class AbonnementService {
       .getMany();
     return qb;
   }
+  async PayeAbo(
+    id: number,
+    user: UpdateAbonnementDto,
+  ): Promise<AbonnementEntity> {
+    const newUser = await this.userRepository.preload({
+      id,
+      ...user,
+    });
+    if (!newUser) {
+      throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
+    }
+    return await this.userRepository.save(newUser);
+  }
 }

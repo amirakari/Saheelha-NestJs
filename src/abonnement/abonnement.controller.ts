@@ -70,4 +70,12 @@ export class AbonnementController {
   ): Promise<AbonnementEntity[]> {
     return await this.userService.getAboParBoutique(id);
   }
+  @Patch('paymee/:id')
+  async PayeAbo(
+    @Body() updateUserDto: UpdateAbonnementDto,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<AbonnementEntity> {
+    updateUserDto.status = 'payé';
+    return await this.userService.PayeAbo(id, updateUserDto);
+  }
 }
