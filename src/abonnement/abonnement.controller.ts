@@ -78,4 +78,8 @@ export class AbonnementController {
     updateUserDto.status = 'payé';
     return await this.userService.PayeAbo(id, updateUserDto);
   }
+  @Get('/paiement/:id')
+  async verifierPaiement(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.verifierPaiement(id);
+  }
 }

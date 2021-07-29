@@ -2,9 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AbonnementEntity } from './entities/abonnement.entity';
 import { UpdateAbonnementDto } from './DTO/update-abonnement.dto';
 import { AddAbonnementDto } from './DTO/Add-abonnement.dto';
-import { InsertResult, Repository } from 'typeorm';
+import { getConnection, InsertResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from '../produit/entities/produit.entity';
+import * as nodemailer from 'nodemailer';
+import { UserEntity } from '../utilisateur/entities/user.entity';
 
 @Injectable()
 export class AbonnementService {
@@ -100,5 +102,62 @@ export class AbonnementService {
       throw new NotFoundException(`le cv d'id ${id} n'existe pas`);
     }
     return await this.userRepository.save(newUser);
+  }
+  async verifierPaiement(id: number) {
+    const datedujour = new Date();
+    const status = 'payé';
+    const qb = await getConnection()
+      .createQueryBuilder()
+      .select('abonnement')
+      .from(AbonnementEntity, 'abonnement')
+      .where('abonnement.boutique.id = :id', { id })
+      .andWhere('abonnement.status = :status', { status })
+      .getRawMany();
+    for (let i = 0; i < qb.length; i++) {
+      console.log(qb[i]);
+      if (qb[i].abonnement_durée === '1 moi') {
+        const d = qb[i].abonnement_createdAt.getDate();
+        qb[i].abonnement_createdAt.setMonth(
+          qb[i].abonnement_createdAt.getMonth() + +1,
+        );
+        if (qb[i].abonnement_createdAt.getDate() != d) {
+          qb[i].abonnement_createdAt.setDate(0);
+        }
+        if (qb[i].abonnement_createdAt > datedujour) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      if (qb[i].abonnement_durée === '3 mois') {
+        const d = qb[i].abonnement_createdAt.getDate();
+        qb[i].abonnement_createdAt.setMonth(
+          qb[i].abonnement_createdAt.getMonth() + +3,
+        );
+        if (qb[i].abonnement_createdAt.getDate() != d) {
+          qb[i].abonnement_createdAt.setDate(0);
+        }
+        console.log(qb[i].abonnement_createdAt);
+        if (qb[i].abonnement_createdAt > datedujour) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      if (qb[i].abonnement_durée === '12 mois') {
+        const d = qb[i].abonnement_createdAt.getDate();
+        qb[i].abonnement_createdAt.setMonth(
+          qb[i].abonnement_createdAt.getMonth() + +12,
+        );
+        if (qb[i].abonnement_createdAt.getDate() != d) {
+          qb[i].abonnement_createdAt.setDate(0);
+        }
+        if (qb[i].abonnement_createdAt > datedujour) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
   }
 }
